@@ -74,7 +74,7 @@ def main():
        with open(inputfile,'r') as fileIn, open(outputfile,'w') as fileOut:
             for line in fileIn:
                 line=line.strip('\n')
-                fileOut.write("{},{}".format(line,dhash(line)))
+                fileOut.write("{},{}\n".format(line,dhash(line)))
     else:
         helpPage()
 if __name__=="__main__":
