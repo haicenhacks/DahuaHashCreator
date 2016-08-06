@@ -58,9 +58,10 @@ def dhash(passw):
     return result
 
 def helpPage():
-     print('DahuaHash.py -v <password to hash> or -i <infile> -o <outfile>')
+     print('DahuaHash.py -p <password to hash> or -i <infile> -o <outfile>')
      print("\t infile is a file with one password per line, output will be"+
-                    " a csv file like <password>,<hash>")
+                    " a csv file like <password>,<hash>\n"+
+                    "Use -v to turn on verbose output")
 
 def main():
     global inputfile
