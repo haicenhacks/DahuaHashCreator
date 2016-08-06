@@ -8,7 +8,15 @@ Created on Tue Aug  2 13:43:37 2016
 import hashlib
 import sys, getopt
 
+global inputfile
+global outputfile
+global verbose
 
+def debug(string):
+    global verbose
+    #print("verb "+str(verbose))
+    if verbose==True:
+        print(string)
 def compressor(in_var, out):
     i=0
     j=0
@@ -28,6 +36,10 @@ def compressor(in_var, out):
         j=j+1
         
 def dhash(passw):
+    #print(len(passw))
+    if len(passw)>6:
+        
+        debug("Warning: password is more than 6 characters. Hash may be incorrect")
     m = hashlib.md5()
     m.update(passw.encode("ascii"))
     
@@ -51,9 +63,13 @@ def helpPage():
                     " a csv file like <password>,<hash>")
 
 def main():
+    global inputfile
+    global outputfile
+    global verbose    
     inputfile,outputfile='',''
+    verbose=False
     try:
-        opts,args = getopt.getopt(sys.argv[1:],"hv:i:o:",["help","password=","infile=","outfile="])
+        opts,args = getopt.getopt(sys.argv[1:],"hvp:i:o:",["help","verbose","password=","infile=","outfile="])
     except getopt.GetoptError:
         helpPage()
         sys.exit(2)
@@ -66,16 +82,21 @@ def main():
             inputfile = arg
         elif opt in ("-o", "--outfile"):
             outputfile = arg
-        elif opt in("-v" , "--password"):
+        elif opt in("-p" , "--password"):
             print("{} = {}".format(arg,dhash(arg)))
             sys.exit()
-            
-    if( not (inputfile=='') and not (outputfile=='')):
+        elif opt in ("-v","--verbose"):
+            verbose=True
+            print("Verbose Output")
+    try:
        with open(inputfile,'r') as fileIn, open(outputfile,'w') as fileOut:
             for line in fileIn:
                 line=line.strip('\n')
-                fileOut.write("{},{}\n".format(line,dhash(line)))
-    else:
+                thishash=dhash(line)
+                fileOut.write("{},{}\n".format(line,thishash))
+                debug("{} = {}\n".format(line,thishash))
+    except:
+        #print("Unexpected error:", sys.exc_info()[0])
         helpPage()
 if __name__=="__main__":
     main()            
