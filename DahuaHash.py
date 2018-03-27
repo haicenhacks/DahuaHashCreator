@@ -22,8 +22,9 @@ def compressor(in_var, out):
     j=0
     
     while i<len(in_var):
-       
-    
+        # python 2.x (thanks to @davidak501)
+        # out[j] = (ord(in_var[i]) + ord(in_var[i+1])) % 62;
+        # python 3.x
         out[j] = (in_var[i] + in_var[i+1]) % 62;
         if (out[j] < 10):
             out[j] += 48
